@@ -108,7 +108,7 @@
             <section>
                 <div>
                     <div class="wide margin abstract">
-                        <h2>Abstract</h2>
+                        <h1>Abstract</h1>
                         <p>
                             Learning how to reach goals in an environment is a longstanding challenge in AI, yet reasoning over long horizons remains a challenge for modern methods. The key question is how to estimate the temporal distance between pairs of observations. While temporal difference methods leverage local updates to provide optimality guarantees, they often perform worse than Monte Carlo methods that perform global updates (e.g., with multi-step returns), which lack such guarantees. We show how these approaches can be integrated into a practical GCRL method that fits a quasimetric distance using a multistep Monte-Carlo return. We show our method outperforms existing GCRL methods on long-horizon simulated tasks with up to 4000 steps, even with visual observations. We also demonstrate that our method can enable stitching in the real- world robotic manipulation domain (Bridge setup). Our approach is the first end-to-end GCRL method that enables multistep stitching in this real-world manipulation domain from an unlabeled offline dataset of visual observations.
                         </p>
@@ -119,11 +119,11 @@
 
             <section>
                 <div>
-                    <h2>Motivation</h2>
+                    <h1>Motivation</h1>
                     <div style="text-align: center;">
                             <img src="static/figures/mainfig.svg" style="width:80%;" />
                     </div>
-                    <p>In goal-conditioned off-policy RL, it is a highly nontrivial task to perform task-stitching: imagine you have seen two separate tasks in a training dataset, and you want to combine them together in evaluation. How should we do that? Recently, quasimetric architecture for value learning has demonstrated. Multistep Quasimetric Estimation (MQE) addresses the following challenges:</p>
+                    <p>In goal-conditioned off-policy RL, it is a highly nontrivial task to perform task-stitching: imagine you have seen two separate tasks in a training dataset, and you want to combine them together in evaluation. How should we do that? Recently, quasimetric architecture for value learning has demonstrated emerging capabilities to stitch these tasks together, which we can call <i>horizon generalization</i>. Our work, Multistep Quasimetric Estimation (MQE), introduces a new approach in learning quasimetric distances, and addresses the following challenges:</p>
                 <ol>
                     <li>How can we scale up the horizon generalization capabilities of value learning using quasimetric distance representations?</li>
                     <li>How can we provide a good quasimetric method for real-world robotic manipulation tasks?</li>
@@ -133,8 +133,9 @@
 
             <section>
                 <div>
-                    <h2>Method</h2>
-                    <p>The main idea of MQE is that to incorporate multistep backup... </p>
+                    <h1>Method</h1>
+                    <p>The main idea of MQE is that to incorporate multistep backup under a quasimetric architecture. While previous works have used </p>
+                    <p>While MQE also requires sampling an additional waypoint for our multistep backup, the method is not hierarchical: we do not require multiple levels of critic or policies, and that since we sample the waypoint randomly, there is no explicit horizon reduction.</p>
                     <details>
                         <summary style="cursor: pointer; font-size: 1em; margin: 0.5em 0;">
                             Show pseudocode
@@ -146,8 +147,8 @@
 
             <section>
                 <div>
-                    <h2>Experiments</h2>
-                    <h3>Tasks</h3>
+                    <h1>Experiments</h1>
+                    <h2>Tasks</h2>
                     <figure style="text-align:center;">
                         <img src="static/figures/experiments.png" alt="Learned distances figure" style="display:block; margin-left:auto; margin-right:auto;">
                         <figcaption style="font-size:0.95em; margin-top:0.5em;">
@@ -157,7 +158,7 @@
                     <p>We use the OGBench setup for our simulated experiments, and we use the Bridge setup for our real-world evaluation. </p>
                     <p>We have designed a <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">colossal</span> maze that tests the horizon generalization capabilities of the policy to its limits, and in the real world, BridgeData has desirable properties where none of the tasks are compositional in nature.</p>
                     
-                    <h4>OGBench Evaluation</h4>
+                    <h3>OGBench Evaluation</h3>
                     <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin-bottom: 1em;">
                         <div style="display: flex; align-items: flex-start; gap: 20px; width: 100%;">
                             <div style="flex: 1; min-width: 200px;">
@@ -171,6 +172,18 @@
                             <img src="static/figures/results-bar.png" alt="Main Results Bar Chart" style="flex: 1; max-width: 48%; height: auto; border: none; border-radius: 5px; margin-left: 0;">
                         </div>
                     </div>
+                    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin-bottom: 1em;">
+                        <div style="display: flex; align-items: flex-start; gap: 20px; width: 100%;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <p>
+                                    <ul>
+                                        <li>We take a special look with <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">stitch</span> datasets to see how well our method can handle long-horizon tasks. The key insight is that stitch datasets only have trajectories that are 4 meters long, and in </li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <img src="static/figures/horizon-generalization.png" alt="Main Results Bar Chart" style="flex: 1; max-width: 48%; height: auto; border: none; border-radius: 5px; margin-left: 0;">
+                        </div>
+                    </div>
                     <details>
                     <summary style="cursor: pointer; font-size: 1em; margin: 0.5em 0;">
                         Show Complete Results Table
@@ -182,7 +195,7 @@
                     <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls loop></video>
                     <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">humanoidmaze-giant-stitch</span>
                     <video src="static/figures/humanoidmaze.mp4" controls loop></video>
-                    <h4>Real-World Evaluation</h4>
+                    <h3>Real-World Evaluation</h3>
                 </div>
             </section>
 
