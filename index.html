@@ -108,7 +108,7 @@
             <section>
                 <div>
                     <div class="wide margin abstract">
-                        <h3>Abstract</h3>
+                        <h2>Abstract</h2>
                         <p>
                             Learning how to reach goals in an environment is a longstanding challenge in AI, yet reasoning over long horizons remains a challenge for modern methods. The key question is how to estimate the temporal distance between pairs of observations. While temporal difference methods leverage local updates to provide optimality guarantees, they often perform worse than Monte Carlo methods that perform global updates (e.g., with multi-step returns), which lack such guarantees. We show how these approaches can be integrated into a practical GCRL method that fits a quasimetric distance using a multistep Monte-Carlo return. We show our method outperforms existing GCRL methods on long-horizon simulated tasks with up to 4000 steps, even with visual observations. We also demonstrate that our method can enable stitching in the real- world robotic manipulation domain (Bridge setup). Our approach is the first end-to-end GCRL method that enables multistep stitching in this real-world manipulation domain from an unlabeled offline dataset of visual observations.
                         </p>
@@ -119,7 +119,7 @@
 
             <section>
                 <div>
-                    <h3>Motivation</h3>
+                    <h2>Motivation</h2>
                     <div style="text-align: center;">
                             <img src="static/figures/mainfig.svg" style="width:80%;" />
                     </div>
@@ -133,7 +133,7 @@
 
             <section>
                 <div>
-                    <h3>Method</h3>
+                    <h2>Method</h2>
                     <p>The main idea of MQE is that to incorporate multistep backup... </p>
                     <details>
                         <summary style="cursor: pointer; font-size: 1em; margin: 0.5em 0;">
@@ -146,7 +146,16 @@
 
             <section>
                 <div>
-                    <h3>Experiments</h3>
+                    <h2>Experiments</h2>
+                    <h3>Tasks</h3>
+                    <figure style="text-align:center;">
+                        <img src="static/figures/experiments.png" alt="Learned distances figure" style="display:block; margin-left:auto; margin-right:auto;">
+                        <figcaption style="font-size:0.95em; margin-top:0.5em;">
+                            Left: the <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">colossal</span> maze designed in this work. Right: example Bridge task setup.
+                        </figcaption>
+                    </figure>
+                    <p>We use the OGBench setup for our simulated experiments, and we use the Bridge setup for our real-world evaluation. </p>
+                    <p>We have designed a <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">colossal</span> maze that tests the horizon generalization capabilities of the policy to its limits, and in the real world, BridgeData has desirable properties where none of the tasks are compositional in nature.</p>
                     
                     <h4>OGBench Evaluation</h4>
                     <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin-bottom: 1em;">
@@ -169,14 +178,17 @@
                     <img src="static/figures/ogbench.png" />
                     </details>
                     <h4>OGBench Rollouts</h4>
-                    <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls></video>
+                    <p><span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">scene-play</span></p>
+                    <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls loop></video>
+                    <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">humanoidmaze-giant-stitch</span>
+                    <video src="static/figures/humanoidmaze.mp4" controls loop></video>
                     <h4>Real-World Evaluation</h4>
                 </div>
             </section>
 
             <section>
                 <div>
-                    <h3>Ablations</h3>
+                    <h2>Ablations</h2>
                     
                     <h4>Can we get a better distance representation compared to other RL methods?</h4>
                     <p>Let's take a look at what are the distances that we actually learn from these methods. We use <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">antmaze-large-explore</span> to find the learned distances $d(s, g)$. As the trajectories inside the dataset is highly noisy, we can use this to empirically compare how well our value functions are being distilled.</p>
