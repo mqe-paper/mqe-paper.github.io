@@ -91,7 +91,7 @@
                     </a>
                 </span>
                 <span class="link">
-                    <a href="https://anonymous.4open.science/r/mqe-paper-686D/" class="button">
+                    <a href="https://github.com/WJ2003B/mqe-release" class="button">
                         <span class="icon"><i class="fas fa-code"></i></span><span>Code</span>
                     </a>
                 </span>
@@ -134,8 +134,23 @@
             <section>
                 <div>
                     <h1>Method</h1>
-                    <p>The main idea of MQE is that to incorporate multistep backup under a quasimetric architecture. While previous works have used </p>
-                    <p>While MQE also requires sampling an additional waypoint for our multistep backup, the method is not hierarchical: we do not require multiple levels of critic or policies, and that since we sample the waypoint randomly, there is no explicit horizon reduction.</p>
+                    <p>The main idea of MQE is that to incorporate multistep backup under a quasimetric architecture. While previous works have used either purely Monte-Carlo methods or one-step TD update methods, we realized that it is better to use multistep backups directly to learn the values!</p>
+                    <h3>Building Blocks: Quasimetric Distance Representations</h3>
+                    <p>Instead of using a neural network or dot product to derive the distance learned, we use </p>
+                    <p>The quasimetric network is parameterized by two encoders: a state-action encoder $\varphi(s, a)$ and a state encoder $\psi(s)$. We can then equivalently define the Q function and value function of some embeddings $x$ and $y$ as:</p>
+                    <p style="text-align: center;">
+                        $d_{\text{mrn}}(x,y) \triangleq \frac{1}{N}\sum_{k=1}^{N} \max_{m=1 \ldots M} \max(0,x_{kM+m} - y_{kM+m}) + \| x_{kM+m} - y_{kM+m}\|_2$
+                    </p>
+                    <p>This is desirable because the distance formulation follows the three important properties of a quasimetric function: identity, non-negativity, and the triangle inequality. The MRN formulation also allows the learned distance to not be necessarily symmetric, which relaxes the distance from a metric to a quasimetric. We can now define the Q function and value function as:</p>
+                    <p style="text-align: center;">
+                        $Q_g(s, a) = V_g(g) e^{-d_{\text{MRN}}(\varphi(s, a), \psi(g))},\quad V_g(s) = V_g(g) e^{-d_{\text{MRN}}(\psi(s), \psi(g))}$
+                    </p>
+                    <p>In short, MQE can be described as this process:</p>
+                    <ol>
+                        <li>Sample a goal $g$ and waypoint $s_w$ from the dataset and the number of steps between the current state $s$ and the waypoint $s_w$.</li>
+                        <li>Learn the Q function via multistep backup: $e^{-d(\varphi(s, a), \psi(g))} \xleftarrow{} \mathbb{E}_{\{(s_t, a_t), s_t^w\} \sim \mathcal{D}}[\gamma^{k'} \cdot e^{-d(\psi(s_t^w), \psi(g))}].$</li>
+                        <li>Learn the value function by minimizing the distance between the embeddings: $d(\psi(s), \varphi(s, a)) \xleftarrow{} 0$.</li>
+                    </ol>
                     <details>
                         <summary style="cursor: pointer; font-size: 1em; margin: 0.5em 0;">
                             Show pseudocode
@@ -177,7 +192,8 @@
                             <div style="flex: 1; min-width: 200px;">
                                 <p>
                                     <ul>
-                                        <li>We take a special look with <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">stitch</span> datasets to see how well our method can handle long-horizon tasks. The key insight is that stitch datasets only have trajectories that are 4 meters long, and in </li>
+                                        <li>We take a special look with <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">stitch</span> datasets to see how well our method can handle long-horizon tasks. The key insight is that stitch datasets only have trajectories that are 4 meters long. Therefore, a policy that can perform well in these settings must be able to perform policy stitching as well as horizon generalization.</li>
+                                        <li>While policy horizon reduction methods have worked well, </li>
                                     </ul>
                                 </p>
                             </div>
@@ -195,7 +211,25 @@
                     <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls loop></video>
                     <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">humanoidmaze-giant-stitch</span>
                     <video src="static/figures/humanoidmaze.mp4" controls loop></video>
-                    <h3>Real-World Evaluation</h3>
+                    <!-- <h3>Real-World Evaluation</h3> -->
+                <!-- <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-bottom: 2em;">
+                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
+                        <video src="static/videos/drawer_mushroom.mp4" controls loop></video>
+                        <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Open Drawer and Put Mushroom in Drawer</span>
+                    </div>
+                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
+                        <video src="static/figures/bridge_2.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
+                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-Push</span></span>
+                    </div>
+                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
+                        <video src="static/figures/bridge_3.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
+                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-DrawerOpen</span></span>
+                    </div>
+                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
+                        <video src="static/figures/bridge_4.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
+                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-Sweep</span></span>
+                    </div>
+                </div> -->
                 </div>
             </section>
 
@@ -211,10 +245,31 @@
                             Distance visualization with several offline RL methods.
                         </figcaption>
                     </figure>
-                    <p>From these figures</p>
-                    <h4>OGBench Rollouts</h4>
-                    <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls></video>
-                    <h4>Real-World Evaluation</h4>
+                    <p>From these figures, we see that MQE has the best structure out of all of the distance representations.</p>
+            </section>
+
+            <section>
+                <div>
+                    <h2>
+                        ${\bf B\kern-.05em{\small I\kern-.025em B}\kern-.08em
+                        T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}$
+                    </h2>
+                    <pre
+                    class="language-bibtex bibtex"
+                    id="bibtex"
+                    onclick="selectContent('#bibtex')">
+                    <code>
+@misc{zheng2025multistepquasimetriclearningscalable,
+title           = "Multistep Quasimetric Learning for Scalable Goal-conditioned Reinforcement Learning", 
+author          = "Bill Chunyuan Zheng and Vivek Myers and Benjamin Eysenbach and Sergey Levine",
+year            = "2025",
+eprint          = "2511.07730",
+archivePrefix   = "arXiv",
+primaryClass    = "cs.LG",
+url             = "https://arxiv.org/abs/2511.07730", 
+}
+                </code>
+                  </pre>
                 </div>
             </section>
 
