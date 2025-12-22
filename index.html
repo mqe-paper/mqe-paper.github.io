@@ -136,7 +136,7 @@
                     <h1>Method</h1>
                     <p>The main idea of MQE is that to incorporate multistep backup under a quasimetric architecture. While previous works have used either purely Monte-Carlo methods or one-step TD update methods, we realized that it is better to use multistep backups directly to learn the values!</p>
                     <h3>Building Blocks: Quasimetric Distance Representations</h3>
-                    <p>Instead of using a neural network or dot product to derive the distance learned, we use </p>
+                    <p>Instead of using a neural network or dot product to derive the distance learned, we use <i>quasimetric architectures</i>.</p>
                     <p>The quasimetric network is parameterized by two encoders: a state-action encoder $\varphi(s, a)$ and a state encoder $\psi(s)$. We can then equivalently define the Q function and value function of some embeddings $x$ and $y$ as:</p>
                     <p style="text-align: center;">
                         $d_{\text{mrn}}(x,y) \triangleq \frac{1}{N}\sum_{k=1}^{N} \max_{m=1 \ldots M} \max(0,x_{kM+m} - y_{kM+m}) + \| x_{kM+m} - y_{kM+m}\|_2$
