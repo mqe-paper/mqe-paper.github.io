@@ -211,31 +211,56 @@
                     <video src="https://res.cloudinary.com/dp7qzzmt2/video/upload/v1760397472/scene_rh6jgn.mp4" controls loop></video>
                     <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">humanoidmaze-giant-stitch</span>
                     <video src="static/figures/humanoidmaze.mp4" controls loop></video>
-                    <!-- <h3>Real-World Evaluation</h3> -->
-                <!-- <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-bottom: 2em;">
-                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
-                        <video src="static/videos/drawer_mushroom.mp4" controls loop></video>
-                        <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Open Drawer and Put Mushroom in Drawer</span>
-                    </div>
-                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
-                        <video src="static/figures/bridge_2.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
-                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-Push</span></span>
-                    </div>
-                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
-                        <video src="static/figures/bridge_3.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
-                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-DrawerOpen</span></span>
-                    </div>
-                    <div style="flex: 1 1 45%; min-width: 300px; max-width: 480px; display: flex; flex-direction: column; align-items: center;">
-                        <video src="static/figures/bridge_4.mp4" controls loop style="width:100%; border-radius: 6px; margin-bottom: 0.5em;"></video>
-                        <span style="font-size: 0.95em;">MQE on <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">Bridge-Sweep</span></span>
-                    </div>
-                </div> -->
-                </div>
-            </section>
 
-            <section>
+                    <h3>Real-World Evaluation</h3>
+                    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin-bottom: 1em;">
+                        <div style="display: flex; align-items: flex-start; gap: 20px; width: 100%;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <p>
+                                    <ul>
+                                        <li>We evaluated MQE on tasks that are progressively more difficult due to longer horizons. We see that while other methods have performances that drop off considerably once we increase the task complexity, MQE maintains its performance.</li>
+                                        <li>This is perhaps the most promising part: while other methods completely fail, MQE is sometimes able to compose <b>four pick and places in sequence</b>!</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <img src="static/figures/real_world_2.svg" alt="Main Results Bar Chart" style="flex: 1; max-width: 48%; height: auto; border: none; border-radius: 5px; margin-left: 0;">
+                        </div>
+                    </div>
+                    <div style="max-width: 900px; margin: 0 auto 2em auto;">
+                        <div style="font-weight: 500; font-size: 1em; margin-bottom: 1em; text-align: left;">
+                            <i>All autonomous; 3x speed</i>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/mqe-single.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Single Pick and Place</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/mqe-double.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Double Pick and Place</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/mqe_triple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Triple Pick and Place</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/mqe-quadruple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Quadruple Pick and Place</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/drawer.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Open the Drawer</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <video src="static/videos/drawer_mushroom.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                <span style="margin-top: 0.5em; font-size: 0.98em;">Open the Drawer and Put Mushroom in Drawer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div>
-                    <h2>Ablations</h2>
+                    <h3>Ablations</h3>
                     
                     <h4>Can we get a better distance representation compared to other RL methods?</h4>
                     <p>Let's take a look at what are the distances that we actually learn from these methods. We use <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">antmaze-large-explore</span> to find the learned distances $d(s, g)$. As the trajectories inside the dataset is highly noisy, we can use this to empirically compare how well our value functions are being distilled.</p>
@@ -245,7 +270,7 @@
                             Distance visualization with several offline RL methods.
                         </figcaption>
                     </figure>
-                    <p>From these figures, we see that MQE has the best structure out of all of the distance representations.</p>
+                    <p>From these figures, we see that MQE has the best structure out of all of the distance representations based on the structure of the learned distances! More importantly, it combines the structure of TD-based methods such as QRL and the global structure of MC-based methods such as CMD and CRL.</p>
             </section>
 
             <section>
