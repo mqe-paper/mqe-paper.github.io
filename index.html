@@ -86,7 +86,7 @@
             </div>
             <div class="links">
                 <span class="link">
-                    <a href="./static/pdf/mqe-paper.pdf" target="_blank" class="button">
+                    <a href="./static/figures/mqe.pdf" target="_blank" class="button">
                         <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
                     </a>
                 </span>
@@ -113,6 +113,9 @@
                             Learning how to reach goals in an environment is a longstanding challenge in AI, yet reasoning over long horizons remains a challenge for modern methods. The key question is how to estimate the temporal distance between pairs of observations. While temporal difference methods leverage local updates to provide optimality guarantees, they often perform worse than Monte Carlo methods that perform global updates (e.g., with multi-step returns), which lack such guarantees. We show how these approaches can be integrated into a practical GCRL method that fits a quasimetric distance using a multistep Monte-Carlo return. We show our method outperforms existing GCRL methods on long-horizon simulated tasks with up to 4000 steps, even with visual observations. We also demonstrate that our method can enable stitching in the real- world robotic manipulation domain (Bridge setup). Our approach is the first end-to-end GCRL method that enables multistep stitching in this real-world manipulation domain from an unlabeled offline dataset of visual observations.
                         </p>
                     </div>
+                    <div style="text-align: center;">
+                        <img src="static/figures/mainfig.svg" style="width:80%;" />
+                    </div>
 
                 </div>
             </section>
@@ -120,21 +123,20 @@
             <section>
                 <div>
                     <h1>Motivation</h1>
-                    <div style="text-align: center;">
-                            <img src="static/figures/mainfig.svg" style="width:80%;" />
-                    </div>
-                    <p>In goal-conditioned off-policy RL, it is a highly nontrivial task to perform task-stitching: imagine you have seen two separate tasks in a training dataset, and you want to combine them together in evaluation. How should we do that? Recently, quasimetric architecture for value learning has demonstrated emerging capabilities to stitch these tasks together, which we can call <i>horizon generalization</i>. Our work, Multistep Quasimetric Estimation (MQE), introduces a new approach in learning quasimetric distances, and addresses the following challenges:</p>
+                    
+                    <p>In goal-conditioned off-policy RL, it is a highly nontrivial task to perform task-stitching: imagine you have seen two separate tasks in a training dataset, and you want to combine them together in evaluation. How should we do that?</p> 
+                    <p><a href="https://horizon-generalization.github.io/">Recently</a>, quasimetric architecture for value learning has demonstrated emerging capabilities to stitch these tasks together, which we can call <i>horizon generalization</i>. Our work, <b>Multistep Quasimetric Estimation (MQE)</b>, introduces a new approach in learning quasimetric distances, and addresses the following challenges:</p>
                 <ol>
-                    <li>How can we scale up the horizon generalization capabilities of value learning using quasimetric distance representations?</li>
-                    <li>How can we provide a good quasimetric method for real-world robotic manipulation tasks?</li>
+                    <li><b>How can we scale up the horizon generalization capabilities of value learning using quasimetric distance representations?</b></li>
+                    <li><b>How can we provide a good quasimetric method for real-world robotic manipulation tasks?</b></li>
                 </ol>
                 </div>
             </section>
 
             <section>
                 <div>
-                    <h1>Method</h1>
-                    <p>The main idea of MQE is that to incorporate multistep backup under a quasimetric architecture. While previous works have used either purely Monte-Carlo methods or one-step TD update methods, we realized that it is better to use multistep backups directly to learn the values!</p>
+                    <h1>Multistep Quasimetric Estimation</h1>
+                    <p>TLDR: MQE incorporate multistep backup under a quasimetric architecture. While previous works have used either purely Monte-Carlo methods (via contrastive learning) or one-step TD update methods, we realized that it is better to use multistep backups directly to learn the values!</p>
                     <h3>Building Blocks: Quasimetric Distance Representations</h3>
                     <p>Instead of using a neural network or dot product to derive the distance learned, we use <i>quasimetric architectures</i>.</p>
                     <p>The quasimetric network is parameterized by two encoders: a state-action encoder $\varphi(s, a)$ and a state encoder $\psi(s)$. We can then equivalently define the Q function and value function of some embeddings $x$ and $y$ as:</p>
@@ -145,6 +147,8 @@
                     <p style="text-align: center;">
                         $Q_g(s, a) = V_g(g) e^{-d_{\text{MRN}}(\varphi(s, a), \psi(g))},\quad V_g(s) = V_g(g) e^{-d_{\text{MRN}}(\psi(s), \psi(g))}$
                     </p>
+
+                    <p>Our key insight is that, under this quasimetric parameterization, we can achieve <b>significantly better horizon generalization capabilities</b> when we sample future states and perform multistep backups, as opposed to one-step updates or multistep updates with fixed number of steps.</p>
                     <p>In short, MQE can be described as this process:</p>
                     <ol>
                         <li>Sample a goal $g$ and waypoint $s_w$ from the dataset and the number of steps between the current state $s$ and the waypoint $s_w$.</li>
@@ -165,9 +169,19 @@
                     <h1>Experiments</h1>
                     <h2>Tasks</h2>
                     <figure style="text-align:center;">
-                        <img src="static/figures/experiments.png" alt="Learned distances figure" style="display:block; margin-left:auto; margin-right:auto;">
+
                         <figcaption style="font-size:0.95em; margin-top:0.5em;">
-                            Left: the <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">colossal</span> maze designed in this work. Right: example Bridge task setup.
+                            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 32px;">
+                                <div style="display: flex; flex-direction: column; align-items: center; width: 48%;">
+                                    <video src="static/videos/humanoidmaze-giant.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                    <!-- <span style="margin-top: 0.5em; font-size: 0.98em;">Single Pick and Place</span> -->
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center; width: 48%;">
+                                    <video src="static/videos/mqe_triple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                    <!-- <span style="margin-top: 0.5em; font-size: 0.98em;">Triple Pick and Place</span> -->
+                                </div>
+                            </div>
+                            Left: the <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">humanoidmaze-giant</span> task in OGBench. Right: example Bridge task setup.
                         </figcaption>
                     </figure>
                     <p>We use the OGBench setup for our simulated experiments, and we use the Bridge setup for our real-world evaluation. </p>
@@ -179,7 +193,7 @@
                             <div style="flex: 1; min-width: 200px;">
                                 <p>
                                     <ul>
-                                        <li>MQE achieves the strongest performance against a variety of offline RL methods on OGBench (90 tasks in total) across both state and pixel-based observations.</li>
+                                        <li>MQE achieves the strongest performance against a variety of offline RL methods on OGBench (95 tasks in total) across both state and pixel-based observations.</li>
                                         <li>In particular, MQE outperforms both comparable quasimetric value learning methods (QRL, CMD, TMD) as well as horizon-reduction methods (n-SAC+BC, HIQL) <i>without requiring any hierarchical components</i>!</li>
                                     </ul>
                                 </p>
@@ -192,7 +206,7 @@
                             <div style="flex: 1; min-width: 200px;">
                                 <p>
                                     <ul>
-                                        <li>We take a special look with <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">stitch</span> datasets to see how well our method can handle long-horizon tasks. The key insight is that stitch datasets only have trajectories that are 4 meters long. Therefore, a policy that can perform well in these settings must be able to perform policy stitching as well as horizon generalization.</li>
+                                        <li>We take a special look with <span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">stitch</span> datasets to see how well our method can handle long-horizon tasks. The key insight is that stitch datasets only have trajectories that are 4 blocks long. Therefore, a policy that can perform well in these settings must be able to perform policy stitching as well as horizon generalization.</li>
                                         <li>While policy horizon reduction methods have worked well, we see that MQE actually generalizes over a much longer horizon better than any existing method!</li>
                                     </ul>
                                 </p>
@@ -204,7 +218,7 @@
                     <summary style="cursor: pointer; font-size: 1em; margin: 0.5em 0;">
                         Show Complete Results Table
                     </summary>
-                    <img src="static/figures/ogbench.png" />
+                    <img src="static/figures/ogbench.svg" />
                     </details>
                     <h4>OGBench Rollouts</h4>
                     <p><span style="font-family: 'American Typewriter', 'Courier New', Courier, monospace;">scene-play</span></p>
@@ -228,8 +242,64 @@
                     </div>
                     <div style="max-width: 900px; margin: 0 auto 2em auto;">
                         <div style="font-weight: 500; font-size: 1em; margin-bottom: 1em; text-align: left;">
-                            <i>All autonomous; 3x speed</i>
+                            <i>All autonomous; $3 \times$ speed</i>
                         </div>
+
+                        <h3> Comparing Against Baselines </h3>
+                        <!-- INSERT_YOUR_CODE -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 2em;">
+                            <!-- Caption Row -->
+                            <div style="text-align: center; font-weight: 500; font-size: 1em;">TRA</div>
+                            <div style="text-align: center; font-weight: 500; font-size: 1em;">GCIQL</div>
+                            <div style="text-align: center; font-weight: 600; font-size: 1em; color: #085299;">MQE (Ours)</div>
+
+                            <!-- Video Row -->
+
+                            <div style="grid-column: 1 / span 3; margin-bottom: 12px;">
+                                <div style="border: 1.5px solid #e6e6e6; border-radius: 6px; padding: 1em; background: #fafbfc;">
+                                    <div style="font-weight: 550; font-size: 1.05em; margin-bottom: 0.6em; text-align: center;">
+                                        Triple Pick and Place
+                                    </div>
+                                    <div style="display: flex; flex-direction: row; justify-content: center; gap: 18px;">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/tra_triple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">⚠️</span>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/gciql_triple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">❌</span>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/mqe_triple.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">✅</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="grid-column: 1 / span 3; margin-bottom: 12px;">
+                                <div style="border: 1.5px solid #e6e6e6; border-radius: 6px; padding: 1em; background: #fafbfc;">
+                                    <div style="font-weight: 550; font-size: 1.05em; margin-bottom: 0.6em; text-align: center;">
+                                        Open the Drawer and Put Mushroom in Drawer
+                                    </div>
+                                    <div style="display: flex; flex-direction: row; justify-content: center; gap: 18px;">
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/tra_drawer.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">⚠️</span>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/gciql_drawer.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">⚠️</span>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center;">
+                                            <video src="static/videos/drawer_mushroom.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
+                                            <span style="margin-top: 0.35em; font-size: 1.5em;">✅</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3> Evaluation Videos </h3>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                             <div style="display: flex; flex-direction: column; align-items: center;">
                                 <video src="static/videos/mqe-single.mp4" autoplay loop muted playsinline style="width:100%; border-radius: 5px;"></video>
